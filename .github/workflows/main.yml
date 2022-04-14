@@ -7,7 +7,6 @@ on:
 jobs:
   install:
     runs-on: ubuntu-latest
-    container: cypress/browsers:node14.17.0-chrome88-ff89
     steps:
       - id: 'get-branch'
         run: echo ::set-output name=branch::$(gh pr view $PR_NO --repo $REPO --json headRefName --jq '.headRefName')
