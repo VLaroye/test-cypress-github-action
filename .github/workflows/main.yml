@@ -12,7 +12,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.head_ref || github.ref_name }} 
+          ref: ${{ steps.comment-branch.outputs.head_ref }}
 
       - name: Cypress install
         uses: cypress-io/github-action@v2
