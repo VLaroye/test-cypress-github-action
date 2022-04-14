@@ -39,7 +39,6 @@ jobs:
   ui-chrome-tests:
     timeout-minutes: 15
     runs-on: ubuntu-latest
-    container: cypress/browsers:node14.17.0-chrome88-ff89
     needs: install
     strategy:
       # when one test fails, DO NOT cancel the other
