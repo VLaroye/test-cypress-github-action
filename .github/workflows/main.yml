@@ -10,7 +10,6 @@ jobs:
     if: (github.event.action == 'created') || (github.event.action == 'labeled' && github.event.label.name == 'cypress:run')
     steps:
       - uses: hmarr/debug-action@v2
-    
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -68,7 +67,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-      - name: "Remove label"
+  remove-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Remove cypress label"
         uses: actions-ecosystem/action-remove-labels@v1
         with:
           labels: cypress:run    
