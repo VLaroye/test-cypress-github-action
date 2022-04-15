@@ -7,19 +7,11 @@ on:
 jobs:
   install:
     runs-on: ubuntu-latest
-    if: (${{ github.event.action === 'created' }}) || ((${{ github.event.action === 'labeled' }}) && (${{ github.event.label.name == 'cypress:run' }}))
+    if: (github.event.action == 'created') || (github.event.action == 'labeled' && github.event.label.name == 'cypress:run')
     steps:
-      - id: 'get-branch'
-        run: echo ::set-output name=branch::$(gh pr view $PR_NO --repo $REPO --json headRefName --jq '.headRefName')
-        env:
-          REPO: ${{ github.repository }}
-          PR_NO: ${{ github.event.issue.number }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+      - uses: hmarr/debug-action@v2
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          ref: ${{ steps.get-branch.outputs.branch }}
 
       - name: Cypress install
         uses: cypress-io/github-action@v2
@@ -51,17 +43,9 @@ jobs:
         # run copies of the current job in parallel
         containers: [1, 2, 3, 4, 5]
     steps:
-      - id: 'get-branch'
-        run: echo ::set-output name=branch::$(gh pr view $PR_NO --repo $REPO --json headRefName --jq '.headRefName')
-        env:
-          REPO: ${{ github.repository }}
-          PR_NO: ${{ github.event.issue.number }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          ref: ${{ steps.get-branch.outputs.branch }}
           
       - name: Download the build folders
         uses: actions/download-artifact@v3
@@ -83,3 +67,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+  remove-label:
+    runs-on: ubuntu-latest
+    needs: ui-chrome-tests
+    if: always()
+    steps:
+      - name: "Remove cypress label"
+        uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          labels: cypress:run    
