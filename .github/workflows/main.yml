@@ -7,6 +7,7 @@ on:
 jobs:
   install:
     runs-on: ubuntu-latest
+    if: (${{ github.event.issue.pull_request }}) && (github.event.comment.html_url === '/cypress run')
     steps:
       - id: 'get-branch'
         run: echo ::set-output name=branch::$(gh pr view $PR_NO --repo $REPO --json headRefName --jq '.headRefName')
