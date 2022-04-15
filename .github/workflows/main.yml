@@ -7,7 +7,7 @@ on:
 jobs:
   install:
     runs-on: ubuntu-latest
-    if: (${{ github.event.action == 'created' }}) || ((${{ github.event.action == 'labeled' }}) && (${{ github.event.label.name == 'cypress:run' }}))
+    if: (github.event.action == 'created') || (github.event.action == 'labeled' && github.event.label.name == 'cypress:run')
     steps:
       - uses: hmarr/debug-action@v2
     
