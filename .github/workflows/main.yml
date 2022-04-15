@@ -69,6 +69,7 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
   remove-label:
     runs-on: ubuntu-latest
+    needs: install
     steps:
       - name: "Remove cypress label"
         uses: actions-ecosystem/action-remove-labels@v1
